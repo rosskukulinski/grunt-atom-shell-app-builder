@@ -3,7 +3,7 @@
  * https://github.com/entropi/grunt-atom-shell-app-builder
  *
  * Copyright (c) 2014 Chad Fawcett
- * 
+ *
  * Licensed under the Apache 2.0 license.
  */
 
@@ -33,7 +33,7 @@ module.exports = function(grunt) {
 
 			var unsupported = false;
 			options.platforms.forEach(function(platform){
-				var supportedPlatforms = ['darwin','win32','linux'];
+				var supportedPlatforms = ['darwin-x64','win32-ia32','linux'];
 				if (supportedPlatforms.indexOf(platform) == -1) {
 					grunt.log.error('Unsupported platform: [' + platform + ']');
 					unsupported = true;
@@ -130,9 +130,9 @@ module.exports = function(grunt) {
 	{
 		grunt.log.subhead("Downloading releases...")
 		options.platforms.forEach(function(platform) {
-			wrench.mkdirSyncRecursive(options.cache_dir);	
+			wrench.mkdirSyncRecursive(options.cache_dir);
 		});
-		async.eachSeries(options.platforms, 
+		async.eachSeries(options.platforms,
 			function(platform, localcallback) {
 				downloadIndividualRelease(options, releaseInfo, platform, localcallback);
 			}, function(err) { callback(err,options); }
@@ -145,7 +145,7 @@ module.exports = function(grunt) {
 		var assetUrl = _.find(releaseInfo.assets, {'name' : assetName }).url;
 		var assetSize = _.find(releaseInfo.assets, {'name' : assetName }).size;
 		var saveLocation = path.join(options.cache_dir,assetName);
-		
+
 		if (fs.existsSync(saveLocation))
 		{
 			var stats = fs.statSync(saveLocation);
@@ -181,7 +181,7 @@ module.exports = function(grunt) {
 	function extractReleases(options, callback)
 	{
 		grunt.log.subhead("Extracting releases...")
-		async.eachSeries(options.platforms, 
+		async.eachSeries(options.platforms,
 			function(platform, localcallback) {
 				grunt.log.ok("Extracting " + platform);
 				wrench.rmdirSyncRecursive(path.join(options.build_dir, platform, "atom-shell"), true);
@@ -199,7 +199,7 @@ module.exports = function(grunt) {
 					zip.stderr.on('data', function(data) { });
 					zip.on('error', function(err){
 						grunt.log.error(err);
-						localcallback(err);	
+						localcallback(err);
 					});
 				}
 				else
@@ -226,7 +226,7 @@ module.exports = function(grunt) {
 		if (options.platforms.indexOf("darwin") != -1)
 		{
 			wrench.copyDirSyncRecursive(options.app_dir, path.join(options.build_dir, "darwin", "atom-shell", "Atom.app", "Contents","Resources", "app"), {
-				forceDelete: true, 
+				forceDelete: true,
 				excludeHiddenUnix: true,
 				preserveFiles: false,
 				preserveTimestamps: true,
@@ -237,7 +237,7 @@ module.exports = function(grunt) {
 		if (options.platforms.indexOf("win32") != -1)
 		{
 			wrench.copyDirSyncRecursive(options.app_dir, path.join(options.build_dir, "win32", "atom-shell", "resources", "app"), {
-				forceDelete: true, 
+				forceDelete: true,
 				excludeHiddenUnix: true,
 				preserveFiles: false,
 				preserveTimestamps: true,
@@ -248,7 +248,7 @@ module.exports = function(grunt) {
 		if (options.platforms.indexOf("linux") != -1)
 		{
 			wrench.copyDirSyncRecursive(options.app_dir, path.join(options.build_dir, "linux", "atom-shell", "resources", "app"), {
-				forceDelete: true, 
+				forceDelete: true,
 				excludeHiddenUnix: true,
 				preserveFiles: false,
 				preserveTimestamps: true,
@@ -260,4 +260,3 @@ module.exports = function(grunt) {
 
 	}
 };
-
