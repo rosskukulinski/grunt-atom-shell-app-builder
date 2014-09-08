@@ -222,41 +222,43 @@ module.exports = function(grunt) {
 
 	function addAppSources(options, callback)
 	{
-		grunt.log.subhead("Adding app to releases.")
-		if (options.platforms.indexOf("darwin") != -1)
-		{
-			wrench.copyDirSyncRecursive(options.app_dir, path.join(options.build_dir, "darwin", "atom-shell", "Atom.app", "Contents","Resources", "app"), {
-				forceDelete: true,
-				excludeHiddenUnix: true,
-				preserveFiles: false,
-				preserveTimestamps: true,
-				inflateSymlinks: true
-			});
-			grunt.log.ok("OS X build located at " + path.join(options.build_dir, "darwin", "atom-shell"));
-		}
-		if (options.platforms.indexOf("win32") != -1)
-		{
-			wrench.copyDirSyncRecursive(options.app_dir, path.join(options.build_dir, "win32", "atom-shell", "resources", "app"), {
-				forceDelete: true,
-				excludeHiddenUnix: true,
-				preserveFiles: false,
-				preserveTimestamps: true,
-				inflateSymlinks: true
-			});
-			grunt.log.ok("Windows build located at " + path.join(options.build_dir, "win32", "atom-shell"));
-		}
-		if (options.platforms.indexOf("linux") != -1)
-		{
-			wrench.copyDirSyncRecursive(options.app_dir, path.join(options.build_dir, "linux", "atom-shell", "resources", "app"), {
-				forceDelete: true,
-				excludeHiddenUnix: true,
-				preserveFiles: false,
-				preserveTimestamps: true,
-				inflateSymlinks: true
-			});
-			grunt.log.ok("Linux build located at " + path.join(options.build_dir, "linux", "atom-shell"));
+		var platforms = options.platforms;
+		for (var i=0; i<platforms.length; i++) {
+			var platform = platforms[i];
+			if (platform.indexOf("darwin") != -1)
+			{
+				wrench.copyDirSyncRecursive(options.app_dir, path.join(options.build_dir, platform, "atom-shell", "Atom.app", "Contents","Resources", "app"), {
+					forceDelete: true,
+					excludeHiddenUnix: true,
+					preserveFiles: false,
+					preserveTimestamps: true,
+					inflateSymlinks: true
+				});
+				grunt.log.ok("OS X build located at " + path.join(options.build_dir, platform, "atom-shell"));
+			}
+			if (platform.indexOf("win32") != -1)
+			{
+				wrench.copyDirSyncRecursive(options.app_dir, path.join(options.build_dir, platform, "atom-shell", "resources", "app"), {
+					forceDelete: true,
+					excludeHiddenUnix: true,
+					preserveFiles: false,
+					preserveTimestamps: true,
+					inflateSymlinks: true
+				});
+				grunt.log.ok("Windows build located at " + path.join(options.build_dir, platform, "atom-shell"));
+			}
+			if (platform.indexOf("linux") != -1)
+			{
+				wrench.copyDirSyncRecursive(options.app_dir, path.join(options.build_dir, platform, "atom-shell", "resources", "app"), {
+					forceDelete: true,
+					excludeHiddenUnix: true,
+					preserveFiles: false,
+					preserveTimestamps: true,
+					inflateSymlinks: true
+				});
+				grunt.log.ok("Linux build located at " + path.join(options.build_dir, platform, "atom-shell"));
 
+			}
 		}
-
 	}
 };
